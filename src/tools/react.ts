@@ -16,6 +16,11 @@ export interface GetComponentStateParams {
   index?: number;
 }
 
+export interface CollectComponentInstancesParams {
+  name?: string;
+  maxInstances?: number;
+}
+
 // React bridge script to inject
 const REACT_BRIDGE = `
 window.__REACT_DEBUG__ = {
@@ -262,6 +267,141 @@ window.__REACT_DEBUG__ = {
       return { error: 'Component not found at index ' + index };
     }
     return components[index];
+  },
+
+  // Get DOM node associated with a fiber
+  getFiberDOMNode: function(fiber) {
+    // Walk down to find the first DOM node
+    let node = fiber;
+    while (node) {
+      if (node.stateNode instanceof HTMLElement) {
+        return node.stateNode;
+      }
+      // For function components, check child
+      if (node.child) {
+        const childDOM = this.getFiberDOMNode(node.child);
+        if (childDOM) return childDOM;
+      }
+      break;
+    }
+    return null;
+  },
+
+  // Collect all instances of components matching a name
+  collectComponentInstances: function(componentName, maxInstances = 20) {
+    const instanceMap = new Map(); // fiber.type -> instances array
+    const typeNameMap = new Map(); // fiber.type -> name
+
+    const collectFiber = (fiber, path = []) => {
+      if (!fiber) return;
+
+      const name = this.getComponentName(fiber);
+
+      // Check if this is a function/class component (not DOM element)
+      if (fiber.type && typeof fiber.type !== 'string') {
+        const matchesSearch = !componentName ||
+          (name && name.toLowerCase().includes(componentName.toLowerCase()));
+
+        if (matchesSearch) {
+          // Use fiber.type as the unique key for grouping
+          const typeKey = fiber.type;
+
+          if (!instanceMap.has(typeKey)) {
+            instanceMap.set(typeKey, []);
+            typeNameMap.set(typeKey, name);
+          }
+
+          const instances = instanceMap.get(typeKey);
+          if (instances.length < maxInstances) {
+            // Get the DOM node for this component
+            const domNode = this.getFiberDOMNode(fiber);
+
+            // Get rendered HTML (limited to avoid huge outputs)
+            let renderedHTML = null;
+            if (domNode) {
+              const html = domNode.outerHTML;
+              renderedHTML = html.length > 5000
+                ? html.substring(0, 5000) + '... [truncated]'
+                : html;
+            }
+
+            // Get minified source via type.toString()
+            let source = null;
+            try {
+              const sourceStr = fiber.type.toString();
+              // Limit source size
+              source = sourceStr.length > 3000
+                ? sourceStr.substring(0, 3000) + '... [truncated]'
+                : sourceStr;
+            } catch (e) {
+              source = '[could not extract source]';
+            }
+
+            instances.push({
+              path: [...path, name].join(' > '),
+              props: this.sanitizeValue(fiber.memoizedProps),
+              hooks: this.extractHooks(fiber),
+              renderedHTML,
+              source: instances.length === 0 ? source : '[same as first instance]',
+            });
+          }
+        }
+      }
+
+      // Recurse into children
+      let child = fiber.child;
+      while (child) {
+        collectFiber(child, [...path, name || 'anonymous']);
+        child = child.sibling;
+      }
+    };
+
+    // Find root and collect
+    const rootCandidates = document.querySelectorAll('[data-reactroot], #root, #app, #__next');
+
+    for (const root of rootCandidates) {
+      const fiber = this.findFiber(root);
+      if (fiber) {
+        let rootFiber = fiber;
+        while (rootFiber.return) {
+          rootFiber = rootFiber.return;
+        }
+        collectFiber(rootFiber);
+        break;
+      }
+    }
+
+    // Fallback: search all elements
+    if (instanceMap.size === 0) {
+      const allElements = document.querySelectorAll('*');
+      for (const el of allElements) {
+        const fiber = this.findFiber(el);
+        if (fiber) {
+          let rootFiber = fiber;
+          while (rootFiber.return) {
+            rootFiber = rootFiber.return;
+          }
+          collectFiber(rootFiber);
+          break;
+        }
+      }
+    }
+
+    // Convert Map to array of component types with their instances
+    const results = [];
+    for (const [typeKey, instances] of instanceMap) {
+      const name = typeNameMap.get(typeKey);
+      results.push({
+        componentName: name,
+        instanceCount: instances.length,
+        instances: instances,
+      });
+    }
+
+    // Sort by instance count (most common first)
+    results.sort((a, b) => b.instanceCount - a.instanceCount);
+
+    return results;
   }
 };
 `;
@@ -362,6 +502,46 @@ export async function getComponentState(params: GetComponentStateParams): Promis
   }
 }
 
+// Collect all instances of a component type with props->HTML mapping
+export async function collectComponentInstances(params: CollectComponentInstancesParams = {}): Promise<ToolResult> {
+  try {
+    const page = await getPage();
+    await ensureReactBridge(page);
+
+    const results = await page.evaluate(
+      ({ name, maxInstances }) => {
+        return window.__REACT_DEBUG__.collectComponentInstances(name, maxInstances);
+      },
+      { name: params.name, maxInstances: params.maxInstances ?? 20 }
+    );
+
+    if (!results || results.length === 0) {
+      return {
+        success: true,
+        data: {
+          message: params.name
+            ? `No components found matching "${params.name}"`
+            : 'No React components found on the page',
+          components: [],
+        },
+      };
+    }
+
+    return {
+      success: true,
+      data: {
+        totalComponentTypes: results.length,
+        components: results,
+      },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
 // Declare global type for React debug
 declare global {
   interface Window {
@@ -374,6 +554,17 @@ declare global {
         hooks: unknown;
       }>;
       getComponentState: (name: string, index: number) => { error?: string } & Record<string, unknown>;
+      collectComponentInstances: (name?: string, maxInstances?: number) => Array<{
+        componentName: string;
+        instanceCount: number;
+        instances: Array<{
+          path: string;
+          props: unknown;
+          hooks: unknown;
+          renderedHTML: string | null;
+          source: string | null;
+        }>;
+      }>;
     };
   }
 }

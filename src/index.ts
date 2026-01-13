@@ -300,6 +300,17 @@ const TOOLS = [
       required: ['name'],
     },
   },
+  {
+    name: 'collect_component_instances',
+    description: 'Collect all instances of a React component type with props→HTML mapping. Useful for understanding component behavior, comparing different usages, or extracting component patterns. Returns props, rendered HTML, and minified source for each instance.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        name: { type: 'string', description: 'Component name to search for (case-insensitive). If omitted, collects all components.' },
+        maxInstances: { type: 'number', description: 'Maximum instances to collect per component type (default: 20)' },
+      },
+    },
+  },
 
   // Debug tools
   {
@@ -419,6 +430,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         break;
       case 'get_component_state':
         result = await react.getComponentState(a(args));
+        break;
+      case 'collect_component_instances':
+        result = await react.collectComponentInstances(a(args));
         break;
 
       // Debug

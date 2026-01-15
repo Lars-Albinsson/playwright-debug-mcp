@@ -29,12 +29,16 @@ Add a demo GIF here:
 
 ## Features
 
-- **28 debugging tools** across 6 categories
+- **40 debugging tools** across 10 categories
 - **Browser Control** - Navigate, click, fill forms, automate user flows
 - **DOM Inspection** - Element details, computed styles, text extraction
 - **Network Monitoring** - Request/response bodies, headers, timing
 - **Console Capture** - Errors, warnings, logs with filtering
 - **React DevTools** - Component tree, props, state, hooks inspection
+- **State Management** - Redux, Zustand, React Query, Context inspection
+- **Performance** - Render tracking, slow components, Web Vitals
+- **Error Detection** - Hydration errors, error boundaries, memory leaks
+- **Accessibility** - WCAG-style audits, ARIA tree inspection
 - **Error Analysis** - AI-powered analysis with suggested fixes
 
 ---
@@ -163,6 +167,34 @@ Suggestions:
 | `find_component` | Search components by name |
 | `get_component_state` | Detailed state/props |
 | `collect_component_instances` | All instances of a component |
+
+### State Management (4 tools)
+| Tool | Description |
+|------|-------------|
+| `get_redux_state` | Redux store state + actions |
+| `get_zustand_stores` | Zustand store inspection |
+| `get_react_query_cache` | React Query cache |
+| `get_context_values` | React Context values |
+
+### Performance (3 tools)
+| Tool | Description |
+|------|-------------|
+| `get_render_count` | Component render tracking |
+| `get_slow_components` | Slow component detection |
+| `get_web_vitals` | Core Web Vitals (LCP, CLS, etc.) |
+
+### Error Detection (3 tools)
+| Tool | Description |
+|------|-------------|
+| `find_hydration_errors` | SSR hydration mismatches |
+| `get_error_boundaries` | React error boundaries |
+| `detect_memory_leaks` | Memory leak indicators |
+
+### Accessibility (2 tools)
+| Tool | Description |
+|------|-------------|
+| `run_accessibility_audit` | WCAG-style audit |
+| `get_aria_tree` | Accessibility tree |
 
 ### Advanced (5 tools)
 | Tool | Description |

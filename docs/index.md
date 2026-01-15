@@ -89,9 +89,13 @@ npm install && npm run build
 | [Network](./tools/network) | 3 tools | Request monitoring, response inspection |
 | [Console](./tools/console) | 2 tools | Log capture, filtering |
 | [React](./tools/react) | 4 tools | Component tree, state, props |
+| [State Management](./tools/state-management) | 4 tools | Redux, Zustand, React Query, Context |
+| [Performance](./tools/performance) | 3 tools | Render tracking, slow components, Web Vitals |
+| [Error Detection](./tools/errors) | 3 tools | Hydration errors, error boundaries, memory leaks |
+| [Accessibility](./tools/accessibility) | 2 tools | WCAG audit, ARIA tree |
 | [Advanced](./tools/advanced) | 5 tools | Screenshots, JS execution, error analysis |
 
-[View all 28 tools →](./tools/)
+[View all 40 tools →](./tools/)
 
 ---
 

@@ -5,7 +5,7 @@ title: Tools Reference
 
 # Tools Reference
 
-Playwright Debug MCP provides **28 tools** organized into 6 categories. Each tool is designed to help AI assistants debug and interact with web applications.
+Playwright Debug MCP provides **40 tools** organized into 10 categories. Each tool is designed to help AI assistants debug and interact with web applications.
 
 ---
 
@@ -18,6 +18,10 @@ Playwright Debug MCP provides **28 tools** organized into 6 categories. Each too
 | [Network Monitoring](#network-monitoring) | 3 | Track and inspect HTTP requests |
 | [Console](#console) | 2 | Capture and filter console logs |
 | [React Debugging](#react-debugging) | 4 | Inspect React components and state |
+| [State Management](#state-management) | 4 | Redux, Zustand, React Query, Context |
+| [Performance](#performance) | 3 | Render tracking, slow components, Web Vitals |
+| [Error Detection](#error-detection) | 3 | Hydration, error boundaries, memory leaks |
+| [Accessibility](#accessibility) | 2 | WCAG audit, ARIA tree inspection |
 | [Advanced](#advanced) | 5 | Screenshots, JS execution, error analysis |
 
 ---
@@ -97,6 +101,62 @@ Tools for inspecting React component trees, props, state, and hooks.
 | `collect_component_instances` | Extract all instances of a component type |
 
 [View detailed documentation →](./react)
+
+---
+
+## State Management
+
+Tools for inspecting application state across popular state management libraries.
+
+| Tool | Description |
+|------|-------------|
+| `get_redux_state` | Inspect Redux store state with action history |
+| `get_zustand_stores` | Discover and inspect Zustand stores |
+| `get_react_query_cache` | View React Query/TanStack Query cache |
+| `get_context_values` | Extract React Context provider values |
+
+[View detailed documentation →](./state-management)
+
+---
+
+## Performance
+
+Tools for tracking component renders and measuring performance.
+
+| Tool | Description |
+|------|-------------|
+| `get_render_count` | Track component render counts and instances |
+| `get_slow_components` | Detect slow-rendering components |
+| `get_web_vitals` | Measure Core Web Vitals (LCP, FID, CLS, etc.) |
+
+[View detailed documentation →](./performance)
+
+---
+
+## Error Detection
+
+Tools for finding hydration mismatches, error boundaries, and memory issues.
+
+| Tool | Description |
+|------|-------------|
+| `find_hydration_errors` | Detect SSR hydration mismatches |
+| `get_error_boundaries` | Find React error boundaries and caught errors |
+| `detect_memory_leaks` | Identify potential memory leak indicators |
+
+[View detailed documentation →](./errors)
+
+---
+
+## Accessibility
+
+Tools for accessibility auditing and ARIA inspection.
+
+| Tool | Description |
+|------|-------------|
+| `run_accessibility_audit` | WCAG-style accessibility audit |
+| `get_aria_tree` | Get the accessibility tree structure |
+
+[View detailed documentation →](./accessibility)
 
 ---
 

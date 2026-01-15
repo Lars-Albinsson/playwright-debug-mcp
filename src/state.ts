@@ -90,3 +90,12 @@ class State implements AppState {
 
 // Singleton instance
 export const state = new State();
+
+// Helper function to get console logs for injection into page context
+export function getConsoleLogs(): Array<{ level: string; text: string; timestamp: string }> {
+  return state.consoleLogs.map(entry => ({
+    level: entry.level,
+    text: entry.text,
+    timestamp: new Date(entry.timestamp).toISOString(),
+  }));
+}

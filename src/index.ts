@@ -14,12 +14,16 @@ import * as network from './tools/network.js';
 import * as inspection from './tools/inspection.js';
 import * as react from './tools/react.js';
 import * as debug from './tools/debug.js';
+import * as state from './tools/state.js';
+import * as performance from './tools/performance.js';
+import * as errors from './tools/errors.js';
+import * as accessibility from './tools/accessibility.js';
 
 // Create the MCP server
 const server = new Server(
   {
     name: 'playwright-debug-mcp',
-    version: '0.1.0',
+    version: '0.2.0',
   },
   {
     capabilities: {
@@ -312,6 +316,120 @@ const TOOLS = [
     },
   },
 
+  // State management tools
+  {
+    name: 'get_redux_state',
+    description: 'Inspect Redux store state and recent actions. Works with Redux DevTools or globally exposed stores.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        path: { type: 'string', description: 'Dot-notation path to specific state slice (e.g., "user.profile")' },
+        actionsLimit: { type: 'number', description: 'Maximum number of recent actions to return (default: 20)' },
+      },
+    },
+  },
+  {
+    name: 'get_zustand_stores',
+    description: 'Inspect Zustand store state. Finds stores used in React components.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        storeName: { type: 'string', description: 'Filter by store name (case-insensitive substring match)' },
+      },
+    },
+  },
+  {
+    name: 'get_react_query_cache',
+    description: 'Inspect React Query/TanStack Query cache. Shows queries, their status, and cached data.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        queryKey: { type: 'string', description: 'Filter by query key (substring match)' },
+        status: { type: 'string', enum: ['all', 'success', 'error', 'loading'], description: 'Filter by query status (default: all)' },
+      },
+    },
+  },
+  {
+    name: 'get_context_values',
+    description: 'List all React Context providers and their current values.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        contextName: { type: 'string', description: 'Filter by context name (case-insensitive substring match)' },
+      },
+    },
+  },
+
+  // Performance tools
+  {
+    name: 'get_render_count',
+    description: 'Track component render counts to identify unnecessary re-renders.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        componentName: { type: 'string', description: 'Filter by component name' },
+        threshold: { type: 'number', description: 'Only show components with renders >= threshold' },
+      },
+    },
+  },
+  {
+    name: 'get_slow_components',
+    description: 'Find React components with slow render times. Requires React Profiler or DevTools.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        threshold: { type: 'number', description: 'Minimum render time in ms to report (default: 16)' },
+        limit: { type: 'number', description: 'Maximum components to return (default: 20)' },
+      },
+    },
+  },
+  {
+    name: 'get_web_vitals',
+    description: 'Get Core Web Vitals (LCP, FID, CLS) and other performance metrics.',
+    inputSchema: { type: 'object' as const, properties: {} },
+  },
+
+  // Error detection tools
+  {
+    name: 'find_hydration_errors',
+    description: 'Detect SSR hydration mismatches. Essential for Next.js/Remix debugging.',
+    inputSchema: { type: 'object' as const, properties: {} },
+  },
+  {
+    name: 'get_error_boundaries',
+    description: 'Find React error boundaries and any errors they have caught.',
+    inputSchema: { type: 'object' as const, properties: {} },
+  },
+  {
+    name: 'detect_memory_leaks',
+    description: 'Detect potential memory leaks: large DOM, detached nodes, growing collections.',
+    inputSchema: { type: 'object' as const, properties: {} },
+  },
+
+  // Accessibility tools
+  {
+    name: 'audit_accessibility',
+    description: 'Run accessibility audit: missing alt text, labels, heading structure, color contrast, ARIA issues.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        selector: { type: 'string', description: 'CSS selector for root element to audit (default: body)' },
+        includeWarnings: { type: 'boolean', description: 'Include warning-level issues (default: true)' },
+      },
+    },
+  },
+  {
+    name: 'get_aria_tree',
+    description: 'Get the accessibility tree showing roles, names, and states. Useful for screen reader debugging.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        selector: { type: 'string', description: 'CSS selector for root element (default: body)' },
+        maxDepth: { type: 'number', description: 'Maximum depth to traverse (default: 10)' },
+      },
+    },
+  },
+
   // Debug tools
   {
     name: 'explain_error',
@@ -433,6 +551,50 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         break;
       case 'collect_component_instances':
         result = await react.collectComponentInstances(a(args));
+        break;
+
+      // State Management
+      case 'get_redux_state':
+        result = await state.getReduxState(a(args));
+        break;
+      case 'get_zustand_stores':
+        result = await state.getZustandStores(a(args));
+        break;
+      case 'get_react_query_cache':
+        result = await state.getReactQueryCache(a(args));
+        break;
+      case 'get_context_values':
+        result = await state.getContextValues(a(args));
+        break;
+
+      // Performance
+      case 'get_render_count':
+        result = await performance.getRenderCount(a(args));
+        break;
+      case 'get_slow_components':
+        result = await performance.getSlowComponents(a(args));
+        break;
+      case 'get_web_vitals':
+        result = await performance.getWebVitals();
+        break;
+
+      // Error Detection
+      case 'find_hydration_errors':
+        result = await errors.findHydrationErrors();
+        break;
+      case 'get_error_boundaries':
+        result = await errors.getErrorBoundaries();
+        break;
+      case 'detect_memory_leaks':
+        result = await errors.detectMemoryLeaks();
+        break;
+
+      // Accessibility
+      case 'audit_accessibility':
+        result = await accessibility.auditAccessibility(a(args));
+        break;
+      case 'get_aria_tree':
+        result = await accessibility.getAriaTree(a(args));
         break;
 
       // Debug

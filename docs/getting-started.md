@@ -5,7 +5,7 @@ title: Getting Started
 
 # Getting Started
 
-This guide will help you install and configure Playwright Debug MCP for use with Claude Desktop or Claude Code.
+This guide will help you install and configure Playwright React Debug MCP for use with Claude Desktop or Claude Code.
 
 ---
 
@@ -22,7 +22,7 @@ This guide will help you install and configure Playwright Debug MCP for use with
 
 ```bash
 # Install globally
-npm install -g playwright-debug-mcp
+npm install -g playwright-react-debug-mcp
 
 # Install Playwright browsers
 npx playwright install chromium
@@ -31,8 +31,8 @@ npx playwright install chromium
 ### Option 2: Clone Repository
 
 ```bash
-git clone https://github.com/Lars-Albinsson/playwright-debug-mcp
-cd playwright-debug-mcp
+git clone https://github.com/Lars-Albinsson/playwright-react-debug-mcp
+cd playwright-react-debug-mcp
 npm install
 npm run build
 npx playwright install chromium
@@ -57,7 +57,7 @@ Add to your Claude Desktop configuration file:
   "mcpServers": {
     "playwright-debug": {
       "command": "npx",
-      "args": ["playwright-debug-mcp"]
+      "args": ["playwright-react-debug-mcp"]
     }
   }
 }
@@ -70,7 +70,7 @@ Or if you cloned the repository:
   "mcpServers": {
     "playwright-debug": {
       "command": "node",
-      "args": ["/absolute/path/to/playwright-debug-mcp/dist/index.js"]
+      "args": ["/absolute/path/to/playwright-react-debug-mcp/dist/index.js"]
     }
   }
 }
@@ -87,7 +87,7 @@ Add to your project's `.mcp.json`:
   "mcpServers": {
     "playwright-debug": {
       "command": "npx",
-      "args": ["playwright-debug-mcp"],
+      "args": ["playwright-react-debug-mcp"],
       "transport": "stdio"
     }
   }
@@ -101,7 +101,7 @@ Or with a local installation:
   "mcpServers": {
     "playwright-debug": {
       "command": "node",
-      "args": ["./node_modules/playwright-debug-mcp/dist/index.js"],
+      "args": ["./node_modules/playwright-react-debug-mcp/dist/index.js"],
       "transport": "stdio"
     }
   }
@@ -125,7 +125,7 @@ Example:
   "mcpServers": {
     "playwright-debug": {
       "command": "npx",
-      "args": ["playwright-debug-mcp"],
+      "args": ["playwright-react-debug-mcp"],
       "env": {
         "PLAYWRIGHT_HEADLESS": "true",
         "MAX_CONSOLE_ENTRIES": "200"
@@ -192,4 +192,4 @@ Grant Terminal or Claude Desktop permissions in System Preferences → Privacy &
 
 - [Explore all available tools →](./tools/)
 - [See example debugging sessions →](./examples/)
-- [Contribute to the project →](https://github.com/Lars-Albinsson/playwright-debug-mcp/blob/main/CONTRIBUTING.md)
+- [Contribute to the project →](https://github.com/Lars-Albinsson/playwright-react-debug-mcp/blob/main/CONTRIBUTING.md)

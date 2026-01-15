@@ -5,7 +5,7 @@ title: Tools Reference
 
 # Tools Reference
 
-Playwright Debug MCP provides **40 tools** organized into 10 categories. Each tool is designed to help AI assistants debug and interact with web applications.
+Playwright React Debug MCP provides **40 tools** organized into 10 categories. Each tool is designed to help AI assistants debug and interact with web applications.
 
 ---
 

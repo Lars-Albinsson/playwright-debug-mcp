@@ -1,10 +1,10 @@
-# Playwright Debug MCP
+# Playwright React Debug MCP
 
-[![npm version](https://img.shields.io/npm/v/playwright-debug-mcp.svg)](https://www.npmjs.com/package/playwright-debug-mcp)
+[![npm version](https://img.shields.io/npm/v/playwright-react-debug-mcp.svg)](https://www.npmjs.com/package/playwright-react-debug-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
 
-**Debug frontend applications with AI assistance using Claude and Playwright.**
+**Debug React applications with AI assistance using Claude and Playwright.**
 
 A [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server that gives Claude the ability to interact with live web applications through a browser. Navigate pages, inspect the DOM, monitor network requests, debug React components, and analyze errors—all through natural conversation.
 
@@ -17,7 +17,7 @@ Add a demo GIF here:
 
 ## Why Use This?
 
-| Traditional Debugging | With Playwright Debug MCP |
+| Traditional Debugging | With Playwright React Debug MCP |
 |-----------------------|---------------------------|
 | Manually reproduce issues | "Navigate to /dashboard and check for errors" |
 | Screenshot and paste into chat | Claude sees the live page and interacts directly |
@@ -48,7 +48,7 @@ Add a demo GIF here:
 ### Install
 
 ```bash
-npm install -g playwright-debug-mcp
+npm install -g playwright-react-debug-mcp
 npx playwright install chromium
 ```
 
@@ -61,7 +61,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "playwright-debug": {
       "command": "npx",
-      "args": ["playwright-debug-mcp"]
+      "args": ["playwright-react-debug-mcp"]
     }
   }
 }
@@ -76,7 +76,7 @@ Add to your project's `.mcp.json`:
   "mcpServers": {
     "playwright-debug": {
       "command": "npx",
-      "args": ["playwright-debug-mcp"],
+      "args": ["playwright-react-debug-mcp"],
       "transport": "stdio"
     }
   }
@@ -250,7 +250,7 @@ Show me the response from the failed API call
   "mcpServers": {
     "playwright-debug": {
       "command": "npx",
-      "args": ["playwright-debug-mcp"],
+      "args": ["playwright-react-debug-mcp"],
       "env": {
         "PLAYWRIGHT_HEADLESS": "true"
       }
@@ -265,8 +265,8 @@ Show me the response from the failed API call
 
 ```bash
 # Clone
-git clone https://github.com/Lars-Albinsson/playwright-debug-mcp
-cd playwright-debug-mcp
+git clone https://github.com/Lars-Albinsson/playwright-react-debug-mcp
+cd playwright-react-debug-mcp
 
 # Install
 npm install
@@ -286,9 +286,9 @@ npm run dev
 
 ## Documentation
 
-- [Getting Started](https://lars-albinsson.github.io/playwright-debug-mcp/getting-started)
-- [Tools Reference](https://lars-albinsson.github.io/playwright-debug-mcp/tools/)
-- [Examples](https://lars-albinsson.github.io/playwright-debug-mcp/examples/)
+- [Getting Started](https://lars-albinsson.github.io/playwright-react-debug-mcp/getting-started)
+- [Tools Reference](https://lars-albinsson.github.io/playwright-react-debug-mcp/tools/)
+- [Examples](https://lars-albinsson.github.io/playwright-react-debug-mcp/examples/)
 
 ---
 

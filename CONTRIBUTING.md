@@ -1,4 +1,4 @@
-# Contributing to Playwright Debug MCP
+# Contributing to Playwright React Debug MCP
 
 Thank you for your interest in contributing! This document provides guidelines for contributing to the project.
 
@@ -7,8 +7,8 @@ Thank you for your interest in contributing! This document provides guidelines f
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/Lars-Albinsson/playwright-debug-mcp
-   cd playwright-debug-mcp
+   git clone https://github.com/Lars-Albinsson/playwright-react-debug-mcp
+   cd playwright-react-debug-mcp
    ```
 3. **Install dependencies**:
    ```bash
@@ -34,7 +34,7 @@ npm run dev
 ### Project Structure
 
 ```
-playwright-debug-mcp/
+playwright-react-debug-mcp/
 ├── src/
 │   ├── index.ts           # MCP server entry point, tool definitions
 │   ├── browser.ts         # Browser lifecycle management

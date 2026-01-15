@@ -1,11 +1,11 @@
 {
-  "name": "playwright-debug-mcp",
+  "name": "playwright-react-debug-mcp",
   "version": "0.2.0",
-  "description": "MCP server for frontend debugging with Playwright - Debug web apps with AI assistance",
+  "description": "MCP server for React debugging with Playwright - Debug React apps with AI assistance",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "playwright-debug-mcp": "dist/index.js"
+    "playwright-react-debug-mcp": "dist/index.js"
   },
   "files": [
     "dist",
@@ -36,12 +36,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lars-Albinsson/playwright-debug-mcp.git"
+    "url": "git+https://github.com/Lars-Albinsson/playwright-react-debug-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/Lars-Albinsson/playwright-debug-mcp/issues"
+    "url": "https://github.com/Lars-Albinsson/playwright-react-debug-mcp/issues"
   },
-  "homepage": "https://github.com/Lars-Albinsson/playwright-debug-mcp#readme",
+  "homepage": "https://github.com/Lars-Albinsson/playwright-react-debug-mcp#readme",
   "engines": {
     "node": ">=18.0.0"
   },

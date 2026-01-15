@@ -5,7 +5,7 @@ title: Examples
 
 # Example Sessions
 
-Real-world examples of debugging with Playwright Debug MCP.
+Real-world examples of debugging with Playwright React Debug MCP.
 
 ---
 

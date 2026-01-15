@@ -22,7 +22,7 @@ import * as accessibility from './tools/accessibility.js';
 // Create the MCP server
 const server = new Server(
   {
-    name: 'playwright-debug-mcp',
+    name: 'playwright-react-debug-mcp',
     version: '0.2.0',
   },
   {

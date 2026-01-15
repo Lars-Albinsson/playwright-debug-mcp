@@ -1,19 +1,19 @@
 ---
 layout: default
-title: Playwright Debug MCP
+title: Playwright React Debug MCP
 ---
 
-# Playwright Debug MCP
+# Playwright React Debug MCP
 
 **Debug frontend applications with AI assistance using Claude and Playwright.**
 
-Playwright Debug MCP is a [Model Context Protocol](https://modelcontextprotocol.io/) server that gives AI assistants like Claude the ability to interact with live web applications through a browser. Ask Claude to navigate, click, fill forms, inspect the DOM, monitor network requests, debug React components, and analyze errors—all through natural conversation.
+Playwright React Debug MCP is a [Model Context Protocol](https://modelcontextprotocol.io/) server that gives AI assistants like Claude the ability to interact with live web applications through a browser. Ask Claude to navigate, click, fill forms, inspect the DOM, monitor network requests, debug React components, and analyze errors—all through natural conversation.
 
 ---
 
 ## Why Use This?
 
-| Traditional Debugging | With Playwright Debug MCP |
+| Traditional Debugging | With Playwright React Debug MCP |
 |-----------------------|---------------------------|
 | Manually reproduce issues | Ask Claude: "Navigate to /dashboard and check for errors" |
 | Screenshot and paste into chat | Claude sees the live page and can interact with it |
@@ -67,12 +67,12 @@ Would you like me to analyze the error further?
 
 ```bash
 # Install
-npm install playwright-debug-mcp
+npm install playwright-react-debug-mcp
 npx playwright install chromium
 
 # Or clone and build
-git clone https://github.com/Lars-Albinsson/playwright-debug-mcp
-cd playwright-debug-mcp
+git clone https://github.com/Lars-Albinsson/playwright-react-debug-mcp
+cd playwright-react-debug-mcp
 npm install && npm run build
 ```
 
@@ -129,5 +129,5 @@ MIT License - Free for personal and commercial use.
   <a href="./getting-started">Get Started</a> •
   <a href="./tools/">Tools Reference</a> •
   <a href="./examples/">Examples</a> •
-  <a href="https://github.com/Lars-Albinsson/playwright-debug-mcp">GitHub</a>
+  <a href="https://github.com/Lars-Albinsson/playwright-react-debug-mcp">GitHub</a>
 </p>

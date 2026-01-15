@@ -1,0 +1,26 @@
+title: Playwright Debug MCP
+description: AI-powered frontend debugging with Playwright and MCP
+remote_theme: pages-themes/minimal@v0.2.0
+plugins:
+  - jekyll-remote-theme
+
+# Navigation
+nav:
+  - title: Home
+    url: /
+  - title: Getting Started
+    url: /getting-started
+  - title: Tools
+    url: /tools/
+  - title: Examples
+    url: /examples/
+  - title: GitHub
+    url: https://github.com/Lars-Albinsson/playwright-debug-mcp
+
+# SEO
+url: https://lars-albinsson.github.io
+baseurl: /playwright-debug-mcp
+
+# Build settings
+markdown: kramdown
+highlighter: rouge

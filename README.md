@@ -1,45 +1,69 @@
 # Playwright Debug MCP
 
-A Model Context Protocol (MCP) server for frontend debugging with Playwright. This tool enables AI assistants like Claude to interact with web applications through a browser, making it easier to debug frontend issues, test user flows, and inspect live applications.
+[![npm version](https://img.shields.io/npm/v/playwright-debug-mcp.svg)](https://www.npmjs.com/package/playwright-debug-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
+
+**Debug frontend applications with AI assistance using Claude and Playwright.**
+
+A [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server that gives Claude the ability to interact with live web applications through a browser. Navigate pages, inspect the DOM, monitor network requests, debug React components, and analyze errors—all through natural conversation.
+
+<!--
+Add a demo GIF here:
+![Demo](./docs/assets/demo.gif)
+-->
+
+---
+
+## Why Use This?
+
+| Traditional Debugging | With Playwright Debug MCP |
+|-----------------------|---------------------------|
+| Manually reproduce issues | "Navigate to /dashboard and check for errors" |
+| Screenshot and paste into chat | Claude sees the live page and interacts directly |
+| Copy-paste console errors | Console logs captured automatically |
+| Open React DevTools manually | Claude queries component tree with state/props |
+| Check Network tab for failures | All HTTP traffic monitored and analyzed |
+
+---
 
 ## Features
 
-- **Browser Control**: Navigate, click, fill forms, and interact with web pages
-- **DOM Inspection**: Get element details, DOM tree, and text content
-- **Network Monitoring**: Track API calls, view request/response details
-- **Console Logs**: Capture and analyze console output
-- **Screenshots**: Take screenshots for visual debugging
-- **JavaScript Execution**: Run custom JavaScript in the page context
-- **React DevTools**: Inspect React component tree, props, and state
-- **Error Analysis**: Analyze errors with full context (network, React state, etc.)
+- **28 debugging tools** across 6 categories
+- **Browser Control** - Navigate, click, fill forms, automate user flows
+- **DOM Inspection** - Element details, computed styles, text extraction
+- **Network Monitoring** - Request/response bodies, headers, timing
+- **Console Capture** - Errors, warnings, logs with filtering
+- **React DevTools** - Component tree, props, state, hooks inspection
+- **Error Analysis** - AI-powered analysis with suggested fixes
 
-## Installation
+---
+
+## Quick Start
+
+### Install
 
 ```bash
-npm install
-npm run build
+npm install -g playwright-debug-mcp
+npx playwright install chromium
 ```
 
-## Usage
+### Configure Claude Desktop
 
-### With Claude Desktop
-
-Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "playwright-debug": {
-      "command": "node",
-      "args": [
-        "/path/to/playwright-debug-mcp/dist/index.js"
-      ]
+      "command": "npx",
+      "args": ["playwright-debug-mcp"]
     }
   }
 }
 ```
 
-### With Claude Code
+### Configure Claude Code
 
 Add to your project's `.mcp.json`:
 
@@ -47,81 +71,217 @@ Add to your project's `.mcp.json`:
 {
   "mcpServers": {
     "playwright-debug": {
-      "command": "node",
-      "args": [
-        "/path/to/playwright-debug-mcp/dist/index.js"
-      ],
+      "command": "npx",
+      "args": ["playwright-debug-mcp"],
       "transport": "stdio"
     }
   }
 }
 ```
 
+### Try It
+
+```
+You: Navigate to https://example.com and take a screenshot
+
+Claude: I'll navigate to the page and capture a screenshot.
+[Browser opens, navigates, returns screenshot]
+
+Done! The page shows...
+```
+
+---
+
+## Example Session
+
+```
+You: Navigate to my app at localhost:3000/login and try logging in
+     with test@example.com
+
+Claude: I'll navigate to the login page and fill in the credentials.
+
+[Navigates, fills email/password, clicks submit]
+
+The login failed. Let me check what happened:
+
+- Console: "TypeError: Cannot read property 'token' of undefined"
+- Network: POST /api/auth returned 200 but body is empty
+- React: AuthProvider shows { isAuthenticated: false, error: null }
+
+The API returns 200 without a token. The frontend expects response.data.token
+but data is undefined. The error state isn't being set because the HTTP
+status was 200.
+
+Suggestions:
+1. Backend should return { data: { token: "..." } } or proper error status
+2. Frontend should validate response structure, not just HTTP status
+```
+
+---
+
 ## Available Tools
 
-### Navigation & Interaction
-- `navigate` - Navigate to a URL
-- `click` - Click on an element
-- `fill` - Fill a form field
-- `select` - Select dropdown options
-- `type` - Type text character by character
-- `hover` - Hover over an element
-- `scroll` - Scroll the page or element
-- `go_back` / `go_forward` / `reload` - Browser navigation
+### Navigation & Interaction (11 tools)
+| Tool | Description |
+|------|-------------|
+| `navigate` | Navigate to URL with wait conditions |
+| `click` | Click elements (left/right/double) |
+| `fill` | Fill form fields |
+| `select` | Select dropdown options |
+| `type` | Type text character-by-character |
+| `hover` | Hover over elements |
+| `scroll` | Scroll page or element into view |
+| `wait_for` | Wait for element/navigation |
+| `go_back` | Browser back |
+| `go_forward` | Browser forward |
+| `reload` | Reload page |
 
-### Inspection
-- `get_dom` - Get summarized DOM tree
-- `get_element` - Get detailed element info
-- `get_text_content` - Get visible text from elements
-- `get_console` - View console logs (with filtering)
-- `get_network` - View network requests (with filtering)
-- `get_request_detail` - Get detailed request/response info
-- `get_debug_summary` - Quick overview of page state
+### Inspection (3 tools)
+| Tool | Description |
+|------|-------------|
+| `get_dom` | Summarized DOM tree |
+| `get_element` | Element details with styles |
+| `get_text_content` | Extract visible text |
 
-### React Debugging
-- `get_react_tree` - Get React component tree
-- `find_component` - Find React components by name
-- `get_component_state` - Get component props and state
+### Network (3 tools)
+| Tool | Description |
+|------|-------------|
+| `get_network` | View requests with filtering |
+| `get_request_detail` | Full request/response details |
+| `clear_network` | Clear captured requests |
 
-### Advanced
-- `screenshot` - Capture screenshots
-- `evaluate_js` - Execute JavaScript in page context
-- `explain_error` - Analyze errors with full context
-- `wait_for` - Wait for elements or navigation
+### Console (2 tools)
+| Tool | Description |
+|------|-------------|
+| `get_console` | View logs with filtering |
+| `clear_console` | Clear captured logs |
 
-## Example Usage
+### React (4 tools)
+| Tool | Description |
+|------|-------------|
+| `get_react_tree` | Component tree with hooks |
+| `find_component` | Search components by name |
+| `get_component_state` | Detailed state/props |
+| `collect_component_instances` | All instances of a component |
 
-Ask Claude:
+### Advanced (5 tools)
+| Tool | Description |
+|------|-------------|
+| `screenshot` | Capture page or element |
+| `evaluate_js` | Execute JavaScript |
+| `explain_error` | AI error analysis |
+| `get_debug_summary` | Page state overview |
 
+---
+
+## Use Cases
+
+**Interactive Debugging**
 ```
-Navigate to https://example.com and check for any console errors
+What errors are on this page?
+Why did the form submission fail?
 ```
 
+**Automated Testing**
 ```
-Click the login button, fill in test credentials, and verify the dashboard loads
-```
-
-```
-Get the React component tree and find the UserProfile component
+Fill the registration form and verify it submits successfully
+Click through the checkout flow and check for errors
 ```
 
+**React Development**
 ```
-Analyze any errors on the page with full context
+Find the UserProfile component and show its state
+What props are being passed to the Modal?
+Collect all Button instances and compare their usage
 ```
+
+**API Integration**
+```
+What requests were made when I clicked submit?
+Show me the response from the failed API call
+```
+
+---
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `MAX_CONSOLE_ENTRIES` | 100 | Console log buffer size |
+| `MAX_NETWORK_ENTRIES` | 100 | Network request buffer size |
+| `PLAYWRIGHT_HEADLESS` | false | Run browser headless |
+
+```json
+{
+  "mcpServers": {
+    "playwright-debug": {
+      "command": "npx",
+      "args": ["playwright-debug-mcp"],
+      "env": {
+        "PLAYWRIGHT_HEADLESS": "true"
+      }
+    }
+  }
+}
+```
+
+---
 
 ## Development
 
 ```bash
+# Clone
+git clone https://github.com/Lars-Albinsson/playwright-debug-mcp
+cd playwright-debug-mcp
+
+# Install
+npm install
+npx playwright install chromium
+
 # Build
 npm run build
 
-# Watch mode
-npm run dev
-
 # Run
 npm start
+
+# Watch mode
+npm run dev
 ```
+
+---
+
+## Documentation
+
+- [Getting Started](https://lars-albinsson.github.io/playwright-debug-mcp/getting-started)
+- [Tools Reference](https://lars-albinsson.github.io/playwright-debug-mcp/tools/)
+- [Examples](https://lars-albinsson.github.io/playwright-debug-mcp/examples/)
+
+---
+
+## Requirements
+
+- Node.js 18+
+- Playwright (Chromium)
+- Claude Desktop or Claude Code
+
+---
+
+## Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+---
 
 ## License
 
-MIT
+MIT License - see [LICENSE](LICENSE) for details.
+
+---
+
+## Related
+
+- [Model Context Protocol](https://modelcontextprotocol.io/)
+- [Playwright](https://playwright.dev/)
+- [Claude](https://claude.ai/)
